@@ -1,7 +1,7 @@
 """
 Handler
 -----------------
-Contains functions to manipulate ground truth data
+Contains functions to manipulate the ground truth data
 
 Dima Borzov, 2013
 """
