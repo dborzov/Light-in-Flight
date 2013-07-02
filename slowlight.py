@@ -39,21 +39,21 @@ for i, row in enumerate(dndy[:-1]):
 
 # simulation stuff
 
-xgrid = np.linspace(0., grid.LENGTH, grid.RESOLUTION_X)
-
 def ray(start, direction):
     y = start*np.ones(grid.RESOLUTION_X)
+    t = np.zeros(grid.RESOLUTION_X)
     yp = +direction*np.ones(grid.RESOLUTION_X) # y prime
-    for i, x in enumerate(xgrid[1:]):
+    for i, x in enumerate(grid.xgrid[1:]):
         if np.abs(y[i])<4.5:
             rhs1 = -1.*(1 + yp[i]**2)*yp[i]*dndx[i,grid.y2j(y[i])] / n[i+1,grid.y2j(y[i])]
             rhs2 = (1 + yp[i]**2)**2 * dndy[i,grid.y2j(y[i])] / n[i,grid.y2j(y[i])]
             yp[i+1] = yp[i] + (rhs1 + rhs2) * grid.dx
             y[i+1] = y[i] + yp[i] * grid.dx
+            t[i+1] = t[i] + grid.dx * n[i,grid.y2j(y[i])] * np.sqrt( 1 + 1 + yp[i]**2)
         else:
             yp[i+1] = yp[i]
             y[i+1] = y[i]
-    return y, yp
+    return y, yp, t
 
 rays = [ray(-4.+0.25*float(k),0.02) for k in range(16)]
 
@@ -63,15 +63,16 @@ rays = [ray(-4.+0.25*float(k),0.02) for k in range(16)]
 FRAMES = 10* 10
 step = grid.RESOLUTION_X/FRAMES
 
-frames = [(i,x) for i, x in enumerate(xgrid[:-SIGMA]) if i%step == 0]
+frames = [(i,x) for i, x in enumerate(grid.xgrid[:-SIGMA]) if i%step == 0]
 indices = [(i,x,a) for a, (i,x) in enumerate(frames)]
 
-for i,x,a in indices:
+for i,x,a in indices: # TODO: x here really means time, should be refactored
     screen = 0.2*n
-    for y, yp in rays:
+    for y, yp, t in rays:
+        l = grid.t2l(t, i)
         for k in range(80): # sigma spread
             for r in range(10): # thickness
-                screen[i+k, grid.y2j(y[i+k]) + r] = 0.5
+                screen[l+k, grid.y2j(y[l+k]) + r] = 0.5
     plt.imshow(screen,interpolation='nearest')
     plt.savefig('slowlight/video_U/'+str(a)+'.png')
     plt.clf()

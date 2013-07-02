@@ -11,6 +11,7 @@ LENGTH = 10.  # in cm
 WIDTH = 10.  # in cm
 
 
+xgrid = np.linspace(0., LENGTH, RESOLUTION_X)
 dx = LENGTH/ float(RESOLUTION_X)
 center = RESOLUTION_Y/2
 dy = WIDTH/ float(RESOLUTION_Y)
@@ -21,6 +22,17 @@ def y2j(y):
         return j
     else:
         return 0
+
+def t2l(t,i):
+    l = i
+    while(t[l] > xgrid[i]):
+        l -= 1
+    return l
+
+
+
+
+
 
 i2x = lambda i:i*dx
 j2y = lambda j:(j)*dy - center*dy
