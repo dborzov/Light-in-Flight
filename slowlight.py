@@ -5,7 +5,7 @@ import csv
 import slowlight.nsetup as nsetup
 import slowlight.grid as grid
 
-SIGMA = 100
+SIGMA = 32
 RAYS_NUMBER = 10
 
 
@@ -70,7 +70,7 @@ for i,x,a in indices: # TODO: x here really means time, should be refactored
     screen = 0.2*n
     for y, yp, t in rays:
         l = grid.t2l(t, i)
-        for k in range(80): # sigma spread
+        for k in range(SIGMA - 5): # sigma spread
             for r in range(10): # thickness
                 screen[l+k, grid.y2j(y[l+k]) + r] = 0.5
     plt.imshow(screen,interpolation='nearest')
