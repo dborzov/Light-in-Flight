@@ -1,0 +1,13 @@
+Wolfgang on report1:
+------------------------------------------
+
+A few points of feedback:
+
+- Section 1.2 (Resolution analysis)
+
+the control signal for modulating both the light and the camera is a square wave, i.e. f is a square wave just like g. In fact with g we can easily confirm this is the case by using a fast photodiode and oscilloscope (which we did). You may have been confused by the visual appearance of the reconstruction, but that is an artifact of the reconstruction process (which ideally should be predicted by whatever analysis we come up with), not a direct result of the modulation shape.
+
+For the sensor side, it is actually much harder to confirm that the actual modulation is a square wave. Our best guess right now is that it is square for lower modulation frequencies, but not for higher ones (although one could actually reverse-engineer the shape from the calibration data and the known light source modulation, but we haven't done so). With perfect square waves, one would expect approximately a triangle shape for c(\tau), which is close to what we observe for low frequencies (but not high ones).
+
+All that said, an analysis like the one you have, but with the appropriate modulation functions is exactly what we want to do...
+
